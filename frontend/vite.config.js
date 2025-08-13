@@ -181,20 +181,43 @@ logger.error = (msg, options) => {
 	loggerError(msg, options);
 }
 
+// export default defineConfig({
+// 	customLogger: logger,
+// 	plugins: [react(), addTransformIndexHtml],
+// 	server: {
+// 		cors: true,
+// 		headers: {
+// 			'Cross-Origin-Embedder-Policy': 'credentialless',
+// 		},
+// 		allowedHosts: true,
+// 	},
+// 	resolve: {
+// 		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
+// 		alias: {
+// 			'@': path.resolve(__dirname, './src'),
+// 		},
+// 	},
+// });
+
 export default defineConfig({
-	customLogger: logger,
-	plugins: [react(), addTransformIndexHtml],
-	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
-		},
-		allowedHosts: true,
-	},
-	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
-		},
-	},
+  customLogger: logger,
+  plugins: [react(), addTransformIndexHtml],
+  server: {
+    cors: true,
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'credentialless',
+    },
+    allowedHosts: true, // for local dev only
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 5173, // will be overridden by Render with process.env.PORT
+    allowedHosts: ['shikshaone.onrender.com'], // <-- add your domain here
+  },
+  resolve: {
+    extensions: ['.jsx', '.js', '.tsx', '.ts', '.json'],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 });
