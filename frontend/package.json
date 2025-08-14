@@ -3,11 +3,14 @@
   "type": "module",
   "version": "0.0.0",
   "private": true,
+  
   "scripts": {
+  "postinstall": "chmod +x node_modules/.bin/vite",
   "build": "npx vite build",
   "dev": "vite",
   "preview": "vite preview"
   },
+  
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
