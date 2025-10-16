@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../config/db.js";
+import User from "../User/userModel.js"; // Import User model
 
 const Student = sequelize.define(
   "Student",
@@ -8,28 +9,45 @@ const Student = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
+      references: {
+        model: User, // Reference User table
+        key: "id", // Column in User table
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
 
-    email: {
+    roll_number: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { isEmail: true },
       unique: true,
     },
 
-    grade_id: {
-      type: DataTypes.INTEGER,
+    dob: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+
+    aadhaar_card: {
+      type: DataTypes.STRING(12),
+      allowNull: true,
+      unique: true,
+    },
+
+    mobile_number: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      unique: true,
+    },
+
+    grades: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
 
     section: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-
-    roll_number: {
-      type: DataTypes.STRING,
-      unique: true,
     },
 
     gender: {
@@ -45,7 +63,12 @@ const Student = sequelize.define(
   {
     timestamps: true,
     tableName: "students",
+    underscored: true,
   }
 );
+
+// Association: Student belongs to User
+Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
 
 export default Student;

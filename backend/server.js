@@ -3,7 +3,6 @@ dotenv.config();
 import app from "./app.js";
 import sequelize from "./config/db.js";
 
-
 const PORT = process.env.PORT || 8000;
 
 (async () => {
@@ -21,4 +20,3 @@ const PORT = process.env.PORT || 8000;
     console.error("❌ DB connection failed:", error);
   }
 })();
-
