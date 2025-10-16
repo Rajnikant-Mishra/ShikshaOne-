@@ -91,15 +91,15 @@ import Users from "./pages/users";
 
 // Pages
 import Dashboard from './pages/dashboard';
-import Students from '@/pages/students';
-import Teachers from '@/pages/teachers';
-import Classes from '@/pages/classes';
-import Attendance from '@/pages/attendance';
-import Grades from '@/pages/grades';
-import Calendar from '@/pages/calendar';
-import Settings from '@/pages/settings';
-import Login from '@/pages/login';
-import NotFound from '@/pages/not-found';
+import Students from './pages/students';
+import Teachers from './pages/teachers';
+import Classes from './pages/classes';
+import Attendance from './pages/attendance';
+import Grades from './pages/grades';
+import Calendar from './pages/calendar';
+import Settings from './pages/settings';
+import Login from './pages/login';
+import NotFound from './pages/not-found';
 
 function App() {
   return (

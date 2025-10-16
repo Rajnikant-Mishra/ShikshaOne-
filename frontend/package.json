@@ -3,15 +3,14 @@
   "type": "module",
   "version": "0.0.0",
   "private": true,
-  
   "scripts": {
-  "postinstall": "chmod +x node_modules/.bin/vite",
-  "build": "npx vite build",
-  "dev": "vite",
-  "preview": "vite preview"
+    "postinstall": "chmod +x node_modules/.bin/vite",
+    "build": "npx vite build",
+    "dev": "vite",
+    "preview": "vite preview"
   },
-  
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.3",
@@ -37,10 +36,12 @@
     "react": "^18.2.0",
     "react-day-picker": "^8.8.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.65.0",
     "react-router-dom": "^6.16.0",
     "serve": "^14.2.4",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.3",

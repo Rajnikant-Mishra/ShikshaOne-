@@ -21,8 +21,12 @@ import {
   UserRoundPen,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "../../components/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,12 +34,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
+} from "../../components/ui/dropdown-menu";
+import { useTheme } from "../../components/theme-provider";
+import { cn } from "../../lib/utils";
+import { useToast } from "../../components/ui/use-toast";
 import { API_BASE_URL } from "../ApiConfig/ApiConfig";
 import { useAuth } from "../../components/contextsAuthsecurity/AuthContext";
+import shikshalogo from "../../assets/shikshaLogo.jpg";
 
 const DashboardLayout = () => {
   const location = useLocation();
@@ -66,7 +71,7 @@ const DashboardLayout = () => {
   //logout section
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/users/logout`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -180,10 +185,18 @@ const DashboardLayout = () => {
         }}
       >
         <div className="flex h-full flex-col">
-          <div className="flex h-16 items-center gap-2 border-b px-6">
+          {/* <div className="flex h-16 items-center gap-2 border-b px-6">
             <GraduationCap className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">EduSync</span>
+          </div> */}
+          <div className="flex h-16 items-center gap-2 border-b px-6">
+            <img
+              src={shikshalogo} // 👈 Path to your image
+              alt="EduSync Logo"
+              className="h-15 w-50 object-contain" // 👈 Adjust size as needed
+            />
           </div>
+
           <div className="flex-1 overflow-auto py-2">
             <nav className="grid gap-1 px-2">
               {sidebarLinks.map((link) => (
@@ -262,16 +275,16 @@ const DashboardLayout = () => {
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={userData.avatar} />
                     <AvatarFallback>
-                      {profileData.username?.charAt(0) || "U"}                                                  
+                      {profileData.username?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
                   <span className="hidden md:inline-flex">
                     {/* {userData.name || "Admin User"} */}
-                    {profileData.username || "User"}
+                    {profileData.role || "User"}
                   </span>
                   <ChevronDown className="h-4 w-4 opacity-50" />
                 </Button>
-              </DropdownMenuTrigger>                   
+              </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />

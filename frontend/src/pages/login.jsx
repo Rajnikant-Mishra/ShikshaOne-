@@ -165,9 +165,9 @@ const Login = () => {
 
     try {
       // Send both email and student_id, letting backend decide based on input
-      const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
+      const response = await axios.post(`${API_BASE_URL}/api/v1/users/login`, {
         email: identifier.includes("@") ? identifier : null, // Assume email if contains '@'
-        student_id: !identifier.includes("@") ? identifier : null, // Assume student_id otherwise
+        user_id: !identifier.includes("@") ? identifier : null, // Assume student_id otherwise
         password,
       });
 
@@ -181,7 +181,7 @@ const Login = () => {
 
       toast({
         title: message || "Login successful",
-        description: "Welcome back to EduSync",
+        description: "Welcome back to Shikshaone",
       });
 
       setTimeout(() => {
@@ -247,15 +247,15 @@ const Login = () => {
                   Forgot password?
                 </a>
               </div>
-             <div className="relative">
+              <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-      <Lock className="h-4 w-4" />
-    </span>
+                  <Lock className="h-4 w-4" />
+                </span>
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                   className="ps-10"
+                  className="ps-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

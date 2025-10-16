@@ -520,16 +520,16 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, Plus, Trash, MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import {
   Card,
   CardContent,
   CardHeader,
   CardFooter,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+} from "../components/ui/card";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
+import { Badge } from "../components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -538,7 +538,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "../components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -546,8 +546,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
+} from "../components/ui/dropdown-menu";
+import { useToast } from "../components/ui/use-toast";
 import axios from "axios";
 import { API_BASE_URL } from "../components/ApiConfig/ApiConfig";
 
