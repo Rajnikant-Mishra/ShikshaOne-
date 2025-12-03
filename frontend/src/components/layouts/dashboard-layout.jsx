@@ -19,6 +19,7 @@ import {
   BarChart3,
   UserPen,
   UserRoundPen,
+  Landmark,
 } from "lucide-react";
 
 import { Button } from "../../components/ui/button";
@@ -40,7 +41,7 @@ import { cn } from "../../lib/utils";
 import { useToast } from "../../components/ui/use-toast";
 import { API_BASE_URL } from "../ApiConfig/ApiConfig";
 import { useAuth } from "../../components/contextsAuthsecurity/AuthContext";
-import shikshalogo from "../../assets/shikshaLogo.jpg";
+import shikshalogo from "../../assets/shikshaLogo.png";
 
 const DashboardLayout = () => {
   const location = useLocation();
@@ -107,35 +108,45 @@ const DashboardLayout = () => {
       icon: <Home className="h-5 w-5" />,
     },
     {
+      path: "/class",
+      label: "Class",
+      icon: <Landmark className="h-5 w-5" />,
+    },
+    {
+      path: "/subject",
+      label: "Subject",
+      icon: <BookOpen className="h-5 w-5" />,
+    },
+    {
       path: "/students",
       label: "Students",
       icon: <Users className="h-5 w-5" />,
     },
-    {
-      path: "/teachers",
-      label: "Teachers",
-      icon: <GraduationCap className="h-5 w-5" />,
-    },
-    {
-      path: "/classes",
-      label: "Classes",
-      icon: <BookOpen className="h-5 w-5" />,
-    },
+    // {
+    //   path: "/teachers",
+    //   label: "Teachers",
+    //   icon: <GraduationCap className="h-5 w-5" />,
+    // },
+    // {
+    //   path: "/classes",
+    //   label: "Classes",
+    //   icon: <BookOpen className="h-5 w-5" />,
+    // },
     {
       path: "/attendance",
       label: "Attendance",
       icon: <ClipboardCheck className="h-5 w-5" />,
     },
-    {
-      path: "/grades",
-      label: "Grades",
-      icon: <BarChart3 className="h-5 w-5" />,
-    },
-    {
-      path: "/calendar",
-      label: "Calendar",
-      icon: <Calendar className="h-5 w-5" />,
-    },
+    // {
+    //   path: "/grades",
+    //   label: "Grades",
+    //   icon: <BarChart3 className="h-5 w-5" />,
+    // },
+    // {
+    //   path: "/calendar",
+    //   label: "Calendar",
+    //   icon: <Calendar className="h-5 w-5" />,
+    // },
     {
       path: "/role",
       label: "Roles",
@@ -144,6 +155,16 @@ const DashboardLayout = () => {
     {
       path: "/users",
       label: "Users",
+      icon: <UserRoundPen className="h-5 w-5" />,
+    },
+    {
+      path: "/menu-assign",
+      label: "Modules",
+      icon: <UserRoundPen className="h-5 w-5" />,
+    },
+    {
+      path: "/permission-menu",
+      label: "Module Permission",
       icon: <UserRoundPen className="h-5 w-5" />,
     },
     {
