@@ -7,7 +7,7 @@ import { Op } from "sequelize";
 import User from "../../models/User/userModel.js";
 import Role from "../../models/Role/roleModel.js";
 import RoleMenu from "../../models/configuration/role_menuModel.js";
-import { createUserSchema } from "../../validations/userValidation.js";
+import { createUserSchema } from "../../validations/users/userValidation.js";
 
 User.belongsTo(Role, { foreignKey: "role_id" }); // Ensure association is declared
 

@@ -1,38 +1,21 @@
-// import express from 'express';
-// import {
-//     assignMenu,
-//     getMenusByRole,
-   
-//     getAllRoleMenu,
-//     deleteRoleMenu
-   
-// } from '../../controllers/configuration/role_menuController.js';
-
-// const router = express.Router();
-
-
-// router.post('/assign', assignMenu);
-// router.get('/:role_id', getMenusByRole);
-// router.get('/menus/all', getAllRoleMenu); 
-// // Delete a consignment by ID
-// router.delete('/assign/:id', deleteRoleMenu);
-
-// export default router;
-
-
-import express from 'express';
-import {
-  assignMenu,
-  getMenusByRole,
-  getAllRoleMenu,
-  deleteRoleMenu
-} from '../../controllers/configuration/role_menuController.js';
+// src/routes/configuration/roleMenu.route.js
+import express from "express";
+import { RoleMenuController } from "../../controllers/configuration/role_menuController.js";
+import { assignMenuSchema, deleteRoleMenuSchema } from "../../validations/menu/roleMenu.validation.js";
+import { validateRequest } from "../../middlewares/validateRequest.js";
 
 const router = express.Router();
 
-router.post('/assign', assignMenu);
-router.get('/menus/all', getAllRoleMenu);
-router.get('/:role_id', getMenusByRole);
-router.delete('/assign/:id', deleteRoleMenu);
+// Assign menu → roles
+router.post("/assign", validateRequest(assignMenuSchema), RoleMenuController.assignMenu);
+
+// Get all mappings
+router.get("/role-menu-all", RoleMenuController.getAllRoleMenu);
+
+// Get menus for specific role
+router.get("/:role_id", RoleMenuController.getMenusByRole);
+
+// Delete a mapping
+router.delete("/assign/:id",validateRequest(deleteRoleMenuSchema, "params"), RoleMenuController.deleteRoleMenu );
 
 export default router;

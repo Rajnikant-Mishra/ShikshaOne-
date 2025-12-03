@@ -15,19 +15,13 @@ const User = sequelize.define(
       allowNull: false,
     },
 
-    student_id: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: true,
-    },
-
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
 
     role_id: {
-      type: DataTypes.INTEGER, // 1 = admin, 2 = student, etc.
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
 

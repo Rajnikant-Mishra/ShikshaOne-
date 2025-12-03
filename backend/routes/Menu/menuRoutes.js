@@ -1,47 +1,14 @@
-// import express from 'express';
-// import {
-//   createMenu,
-//   getAllMenus,
-//   getMenuById,
-//   updateMenu,
-//   deleteMenu,
-// } from '../../controllers/Menu/menuController.js';
-
-// const router = express.Router();
-
-// // Route to create a new menu
-// router.post('/menu', createMenu);
-
-// // Route to get all menus
-// router.get('/menu', getAllMenus);
-
-// // Route to get a specific menu by ID
-// router.get('/menu/:id', getMenuById);
-
-// // Route to update a menu by ID
-// router.put('/menu/:id', updateMenu);
-
-// // Route to delete a menu by ID
-// router.delete('/menu/:id', deleteMenu);
-
-// export default router;
-
-
-import express from 'express';
-import {
-  createMenu,
-  getAllMenus,
-  getMenuById,
-  updateMenu,
-  deleteMenu,
-} from '../../controllers/Menu/menuController.js';
+import express from "express";
+import { validateRequest } from "../../middlewares/validateRequest.js";
+import { createMenuSchema, updateMenuSchema } from "../../validations/menu/menu.validation.js";
+import { MenuController } from "../../controllers/Menu/menuController.js";
 
 const router = express.Router();
 
-router.post('/menu', createMenu);
-router.get('/menu', getAllMenus);
-router.get('/menu/:id', getMenuById);
-router.put('/menu/:id', updateMenu);
-router.delete('/menu/:id', deleteMenu);
+router.post("/", validateRequest(createMenuSchema), MenuController.create);
+router.get("/", MenuController.getAll);
+router.get("/:id", MenuController.getById);
+router.put("/:id", MenuController.update);
+router.delete("/:id", MenuController.remove);
 
 export default router;
