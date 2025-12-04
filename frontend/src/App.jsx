@@ -75,8 +75,6 @@
 
 // export default App;
 
-
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -140,11 +138,13 @@ function App() {
                   element={<RedirectIfAuthenticated element={<Login />} />}
                 />
 
-                <Route element={<ProtectedRoute element={<DashboardLayout />} />}>
+                <Route
+                  element={<ProtectedRoute element={<DashboardLayout />} />}
+                >
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/students" element={<Students />} />
                   <Route path="/class" element={<ClassList />} />
-                  <Route path="/subject" element={<SubjectList/>} />
+                  <Route path="/subject" element={<SubjectList />} />
                   <Route path="/teachers" element={<Teachers />} />
                   <Route path="/classes" element={<Classes />} />
                   <Route path="/attendance" element={<Attendance />} />
