@@ -128,9 +128,6 @@
 
 // export default app;
 
-
-
-
 // ✅ Core Imports
 import express from "express";
 import bodyParser from "body-parser";
@@ -144,15 +141,14 @@ import errorHandler from "./middlewares/errorHandler.js";
 import path from "path";
 
 // ✅ Route Imports
-import userRoutes from "./routes/User/userRoutes.js";
-import roleRoutes from "./routes/Role/roleRoutes.js";
-import studentClassRoutes from "./routes/class/studentClass.routes.js";
-import subjectRoutes from "./routes/subject/subject.routes.js";
-import gradeRouters from "./routes/grade/gradeRoutes.js";
-import menuRoutes from "./routes/Menu/menuRoutes.js";
-import rolemenuRoutes from "./routes/configuration/role_menuRoutes.js";
-import studentRoutes from "./routes/student/student.routes.js";
-import attendanceRoutes from "./routes/attendance/attendance.routes.js";
+import userRoutes from "./Modules/Users/user.routes.js";
+import roleRoutes from "./Modules/Role/role.routes.js";
+import studentClassRoutes from "./Modules/Class/class.routes.js";
+import subjectRoutes from "./Modules/Subject/subject.routes.js";
+import menuRoutes from "./Modules/Menu/menu.routes.js";
+import rolemenuRoutes from "./Modules/Menupermission/menupermission.routes.js";
+import studentRoutes from "./Modules/Student/student.routes.js";
+
 
 const app = express();
 
@@ -229,22 +225,25 @@ app.use(
 );
 
 // ✅ --- Static Folder for Uploads ---
-// app.use("/uploads", express.static("uploads"));
 
-// THIS LINE FIXES EVERYTHING
-// app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// app.use("/profiles", express.static("profiles"));
+
+app.use(
+  "/profiles",
+  express.static(path.join(process.cwd(), "profiles"))
+);
+
+
 
 // ✅ --- API Routes ---
 app.use("/api/v1/users", userRoutes);
 app.use("/api", roleRoutes);
 app.use("/api/student-class", studentClassRoutes);
 app.use("/api/subjects", subjectRoutes);
-app.use("/api", gradeRouters);
 app.use("/api/students", studentRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/menurole", rolemenuRoutes);
-app.use("/api/attendance", attendanceRoutes);
+
 
 // ✅ --- Global Error Handler ---
 app.use(errorHandler);
