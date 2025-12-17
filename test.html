@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Students – List View</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+ 
+  <!-- PAGE WRAPPER -->
+  <div class="max-w-7xl mx-auto p-4">
+ 
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+      <div>
+        <h1 class="text-2xl font-semibold">Students</h1>
+        <p class="text-sm text-gray-500">Academic Year: 2025–26</p>
+      </div>
+      <div class="flex gap-2 mt-3 md:mt-0">
+        <button class="bg-indigo-600 text-white px-4 py-2 rounded">+ Add Student</button>
+        <button class="border px-4 py-2 rounded">Import</button>
+        <button class="border px-4 py-2 rounded">Export</button>
+      </div>
+    </div>
+ 
+    <!-- FILTER BAR -->
+    <div class="bg-white rounded shadow p-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+        <select class="border rounded p-2">
+          <option>All Classes</option>
+          <option>Class 1</option>
+          <option>Class 2</option>
+        </select>
+        <select class="border rounded p-2">
+          <option>All Sections</option>
+          <option>A</option>
+          <option>B</option>
+        </select>
+        <select class="border rounded p-2">
+          <option>Status</option>
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+        <select class="border rounded p-2">
+          <option>Tags</option>
+          <option>Transport</option>
+          <option>Scholarship</option>
+        </select>
+        <input type="text" placeholder="Search name / admission / phone" class="border rounded p-2 col-span-2" />
+      </div>
+    </div>
+ 
+    <!-- BULK ACTION BAR (hidden by default) -->
+    <div class="bg-indigo-50 border border-indigo-200 p-3 rounded mb-3 hidden" id="bulkBar">
+      <div class="flex justify-between items-center">
+        <span class="text-sm">3 students selected</span>
+        <div class="flex gap-2">
+          <button class="border px-3 py-1 rounded">Assign Bus</button>
+          <button class="border px-3 py-1 rounded">Send SMS</button>
+          <button class="border px-3 py-1 rounded">Promote</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TABLE VIEW (DESKTOP) -->
+    <div class="hidden md:block bg-white rounded shadow overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 sticky top-0">
+          <tr class="text-left">
+            <th class="p-3"><input type="checkbox" /></th>
+            <th class="p-3">Student</th>
+            <th class="p-3">Adm No</th>
+            <th class="p-3">Class</th>
+            <th class="p-3">Roll</th>
+            <th class="p-3">Phone</th>
+            <th class="p-3">Tags</th>
+            <th class="p-3">Status</th>
+            <th class="p-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- ROW -->
+          <tr class="border-t hover:bg-gray-50">
+            <td class="p-3"><input type="checkbox" /></td>
+            <td class="p-3 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+              <div>
+                <div class="font-medium">Aarav Mishra</div>
+                <div class="text-xs text-gray-500">Section A</div>
+              </div>
+            </td>
+            <td class="p-3">ADM1023</td>
+            <td class="p-3">Class 5</td>
+            <td class="p-3">12</td>
+            <td class="p-3">9876543210</td>
+            <td class="p-3">
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Transport</span>
+            </td>
+            <td class="p-3">
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Active</span>
+            </td>
+            <td class="p-3">
+              <button class="text-indigo-600">View</button>
+            </td>
+          </tr>
+ 
+          <!-- MORE ROWS -->
+          <tr class="border-t hover:bg-gray-50">
+            <td class="p-3"><input type="checkbox" /></td>
+            <td class="p-3 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+              <div>
+                <div class="font-medium">Saanvi Patel</div>
+                <div class="text-xs text-gray-500">Section B</div>
+              </div>
+            </td>
+            <td class="p-3">ADM1187</td>
+            <td class="p-3">Class 6</td>
+            <td class="p-3">08</td>
+            <td class="p-3">9123456780</td>
+            <td class="p-3">
+              <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded">Scholarship</span>
+            </td>
+            <td class="p-3">
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Active</span>
+            </td>
+            <td class="p-3">
+              <button class="text-indigo-600">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <!-- CARD VIEW (MOBILE) -->
+    <div class="md:hidden space-y-3">
+      <div class="bg-white p-4 rounded shadow">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gray-300"></div>
+          <div>
+            <div class="font-medium">Aarav Mishra</div>
+            <div class="text-xs text-gray-500">Class 5 • Section A</div>
+          </div>
+        </div>
+        <div class="mt-3 text-sm">
+          <div>Adm No: ADM1023</div>
+          <div>Phone: 9876543210</div>
+        </div>
+        <div class="mt-3 flex justify-between items-center">
+          <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Transport</span>
+          <button class="text-indigo-600">View Profile</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- PAGINATION -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mt-6">
+      <div class="text-sm text-gray-600 mb-2 md:mb-0">
+        Showing 1–10 of 3,482 students
+      </div>
+      <div class="flex items-center gap-1">
+        <button class="border px-3 py-1 rounded">«</button>
+        <button class="border px-3 py-1 rounded">‹</button>
+        <button class="bg-indigo-600 text-white px-3 py-1 rounded">1</button>
+        <button class="border px-3 py-1 rounded">2</button>
+        <button class="border px-3 py-1 rounded">3</button>
+        <button class="border px-3 py-1 rounded">›</button>
+        <button class="border px-3 py-1 rounded">»</button>
+      </div>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

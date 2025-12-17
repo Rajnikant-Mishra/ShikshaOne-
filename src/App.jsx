@@ -75,8 +75,6 @@
 
 // export default App;
 
-
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -92,14 +90,19 @@ import RedirectIfAuthenticated from "./components/contextsAuthsecurity/RedirectI
 import DashboardLayout from "./components/layouts/dashboard-layout";
 
 // Pages
-import Roles from "./pages/roles";
-import Users from "./pages/users";
-import MenuList from "./pages/MenuList";
+import Roles from "./pages/roles/RoleList";
+import Users from "./pages/users/UserList";
+import UserForm from "./pages/users/UserForm";
+import MenuList from "./pages/menu/MenuList";
+import MenuPermission from "./pages/menu-permission/Menu-permissionList";
+
 import ClassList from "./pages/class/ClassList";
 import SubjectList from "./pages/subject/SubjectList";
 
 import Dashboard from "./pages/dashboard";
-import Students from "./pages/student/students";
+import Students from "./pages/student/studentsList";
+import AddStudentForm from "./pages/student/studentForm";
+
 import Teachers from "./pages/teachers";
 import Classes from "./pages/classes";
 import Attendance from "./pages/attendance/attendance";
@@ -108,6 +111,22 @@ import Calendar from "./pages/calendar";
 import Settings from "./pages/settings";
 import Login from "./pages/login";
 import NotFound from "./pages/not-found";
+
+// activity logs
+import ActivityLogs from "./pages/activitylogs/ActivitylogsList";
+
+//exams
+import ExamList from "./pages/exams/ExamList";
+//fees
+import FeesList from "./pages/fees/FeesList";
+//leave
+import LeaveList from "./pages/leavemanagements/LeaveList";
+//setting system
+import SettingsystemList from "./pages/setting-system/SettingsystemList";
+//teacher
+import TeacherList from "./pages/teacher/TeacherList";
+//time table
+import TimeTableList from "./pages/timetables/TimeTableList";
 
 // Create QueryClient (only once)
 const queryClient = new QueryClient({
@@ -140,11 +159,14 @@ function App() {
                   element={<RedirectIfAuthenticated element={<Login />} />}
                 />
 
-                <Route element={<ProtectedRoute element={<DashboardLayout />} />}>
+                <Route
+                  element={<ProtectedRoute element={<DashboardLayout />} />}
+                >
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/students" element={<Students />} />
+                  <Route path="/students/add" element={<AddStudentForm />} />
                   <Route path="/class" element={<ClassList />} />
-                  <Route path="/subject" element={<SubjectList/>} />
+                  <Route path="/subject" element={<SubjectList />} />
                   <Route path="/teachers" element={<Teachers />} />
                   <Route path="/classes" element={<Classes />} />
                   <Route path="/attendance" element={<Attendance />} />
@@ -152,8 +174,27 @@ function App() {
                   <Route path="/calendar" element={<Calendar />} />
                   <Route path="/role" element={<Roles />} />
                   <Route path="/users" element={<Users />} />
+                  <Route path="/user/create" element={<UserForm/>} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/menu-assign" element={<MenuList />} />
+                  <Route path="/permission-menu" element={<MenuPermission />} />
+
+                  <Route path="/logs-activity" element={<ActivityLogs />} />
+                  <Route path="/exam" element={<ExamList />} />
+                  <Route path="/fee" element={<FeesList />} />
+                  <Route path="/leave" element={<LeaveList />} />
+                  <Route
+                    path="/setting-system"
+                    element={<SettingsystemList />} 
+                  />
+                  <Route
+                    path="/teacher"
+                    element={<TeacherList/>}
+                  />
+                  <Route
+                    path="/time-table"
+                    element={<TimeTableList/>}
+                  />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />

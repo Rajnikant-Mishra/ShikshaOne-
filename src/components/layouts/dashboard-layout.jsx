@@ -122,31 +122,42 @@ const DashboardLayout = () => {
       label: "Students",
       icon: <Users className="h-5 w-5" />,
     },
-    // {
-    //   path: "/teachers",
-    //   label: "Teachers",
-    //   icon: <GraduationCap className="h-5 w-5" />,
-    // },
-    // {
-    //   path: "/classes",
-    //   label: "Classes",
-    //   icon: <BookOpen className="h-5 w-5" />,
-    // },
+    {
+      path: "/teacher",
+      label: "Teacher Management",
+      icon: <UserRoundPen className="h-5 w-5" />,
+    },
+
+    {
+      path: "/exam",
+      label: "Exam",
+      icon: <BookOpen className="h-5 w-5" />,
+    },
+        {
+      path: "/time-table",
+      label: "Time Table Management",
+      icon: <BookOpen className="h-5 w-5" />,
+    },
     {
       path: "/attendance",
       label: "Attendance",
       icon: <ClipboardCheck className="h-5 w-5" />,
     },
-    // {
-    //   path: "/grades",
-    //   label: "Grades",
-    //   icon: <BarChart3 className="h-5 w-5" />,
-    // },
-    // {
-    //   path: "/calendar",
-    //   label: "Calendar",
-    //   icon: <Calendar className="h-5 w-5" />,
-    // },
+    {
+      path: "/leave",
+      label: "Leave management",
+      icon: <GraduationCap className="h-5 w-5" />,
+    },
+    {
+      path: "/logs-activity",
+      label: "Logs activity",
+      icon: <BarChart3 className="h-5 w-5" />,
+    },
+    {
+      path: "/fee",
+      label: "Fee",
+      icon: <Calendar className="h-5 w-5" />,
+    },
     {
       path: "/role",
       label: "Roles",
@@ -154,7 +165,7 @@ const DashboardLayout = () => {
     },
     {
       path: "/users",
-      label: "Users",
+      label: "Users Management",
       icon: <UserRoundPen className="h-5 w-5" />,
     },
     {
@@ -166,6 +177,11 @@ const DashboardLayout = () => {
       path: "/permission-menu",
       label: "Module Permission",
       icon: <UserRoundPen className="h-5 w-5" />,
+    },
+    {
+      path: "/setting-system",
+      label: "Settings System",
+      icon: <Settings className="h-5 w-5" />,
     },
     {
       path: "/settings",
