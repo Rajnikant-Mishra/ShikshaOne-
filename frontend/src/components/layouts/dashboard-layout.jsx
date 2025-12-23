@@ -101,6 +101,8 @@ const DashboardLayout = () => {
     }
   };
 
+
+
   const sidebarLinks = [
     {
       path: "/dashboard",
@@ -133,7 +135,7 @@ const DashboardLayout = () => {
       label: "Exam",
       icon: <BookOpen className="h-5 w-5" />,
     },
-        {
+    {
       path: "/time-table",
       label: "Time Table Management",
       icon: <BookOpen className="h-5 w-5" />,

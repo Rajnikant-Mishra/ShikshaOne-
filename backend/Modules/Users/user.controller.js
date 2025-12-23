@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
-import { Op } from "sequelize";
+import { Op, fn, col, where } from "sequelize";
 
 import User from "../../Modules/Users/user.models.js";
 import Role from "../Role/role.model.js";
@@ -10,8 +10,6 @@ import RoleMenu from "../Menupermission/menupermission.model.js";
 import { createUserSchema } from "../../validations/users/userValidation.js";
 
 User.belongsTo(Role, { foreignKey: "role_id" }); // Ensure association is declared
-
-
 
 export const createUser = async (req, res) => {
   try {
@@ -68,7 +66,6 @@ export const createUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 // Login User
 export const loginUser = async (req, res) => {
@@ -137,58 +134,128 @@ export const logoutUser = async (req, res) => {
 };
 
 // // Get All Users
+// export const getAllUsers = async (req, res) => {
+//   try {
+//     const { page = 1, limit = 10, search = "", role = "" } = req.query;
+
+//     const offset = (parseInt(page) - 1) * parseInt(limit);
+
+//     // Build where clause for User
+//     const userWhere = search
+//       ? {
+//           [Op.or]: [
+//             { email: { [Op.like]: `%${search}%` } },
+//             { student_id: { [Op.like]: `%${search}%` } },
+//           ],
+//         }
+//       : {};
+
+//     // Build where clause for Role (optional filter by role)
+//     const roleWhere = role ? { role_name: { [Op.like]: `%${role}%` } } : {};
+
+//     const { count, rows: users } = await User.findAndCountAll({
+//       where: userWhere,
+//       include: [
+//         {
+//           model: Role,
+//           where: roleWhere,
+//           attributes: ["id", "role_name"],
+//         },
+//       ],
+//       limit: parseInt(limit),
+//       offset: offset,
+//       order: [["id", "DESC"]],
+//     });
+
+//     res.status(200).json({
+//       totalUsers: count,
+//       totalPages: Math.ceil(count / limit),
+//       currentPage: parseInt(page),
+//       users: users.map((u) => ({
+//         id: u.id,
+//         student_id: u.student_id,
+//         username: u.username,
+//         user_profile: u.user_profile,
+//         email: u.email,
+//         role_id: u.role_id,
+//         role_name: u.Role ? u.Role.role_name : null,
+//         status: u.status,
+//         created_at: u.created_at,
+//         updated_at: u.updated_at,
+//       })),
+//     });
+//   } catch (err) {
+//     console.error("Error fetching users:", err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
 export const getAllUsers = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "", role = "" } = req.query;
+    let { page = 1, limit = 10, search = "", status = "" } = req.query;
 
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+    page = Number(page);
+    limit = Number(limit);
+    const offset = (page - 1) * limit;
 
-    // Build where clause for User
-    const userWhere = search
-      ? {
-          [Op.or]: [
-            { email: { [Op.like]: `%${search}%` } },
-            { student_id: { [Op.like]: `%${search}%` } },
-          ],
-        }
-      : {};
+    search = search ? search.toLowerCase().trim() : "";
 
-    // Build where clause for Role (optional filter by role)
-    const roleWhere = role ? { role_name: { [Op.like]: `%${role}%` } } : {};
+    /* ======================
+       GLOBAL SEARCH (User + Role)
+    ====================== */
+    const whereCondition = {};
 
-    const { count, rows: users } = await User.findAndCountAll({
-      where: userWhere,
+    if (search) {
+      whereCondition[Op.or] = [
+        where(fn("LOWER", col("User.email")), {
+          [Op.like]: `%${search}%`,
+        }),
+        where(fn("LOWER", col("User.username")), {
+          [Op.like]: `%${search}%`,
+        }),
+        where(fn("LOWER", col("User.status")), {
+          [Op.like]: `%${search}%`,
+        }),
+        where(fn("LOWER", col("Role.role_name")), {
+          [Op.like]: `%${search}%`,
+        }),
+      ];
+    }
+
+    if (status) {
+      whereCondition.status = status.toLowerCase();
+    }
+
+    const { count, rows } = await User.findAndCountAll({
+      where: whereCondition,
       include: [
         {
           model: Role,
-          where: roleWhere,
           attributes: ["id", "role_name"],
+          required: false, // 🔥 LEFT JOIN (important)
         },
       ],
-      limit: parseInt(limit),
-      offset: offset,
+      distinct: true,
+      limit,
+      offset,
       order: [["id", "DESC"]],
     });
 
     res.status(200).json({
       totalUsers: count,
       totalPages: Math.ceil(count / limit),
-      currentPage: parseInt(page),
-      users: users.map((u) => ({
+      currentPage: page,
+      users: rows.map((u) => ({
         id: u.id,
-        student_id: u.student_id,
         username: u.username,
-        user_profile: u.user_profile,
         email: u.email,
-        role_id: u.role_id,
-        role_name: u.Role ? u.Role.role_name : null,
         status: u.status,
-        created_at: u.created_at,
-        updated_at: u.updated_at,
+        user_profile: u.user_profile,
+        role_name: u.Role ? u.Role.role_name : null, // ✅ ALWAYS COMES
       })),
     });
-  } catch (err) {
-    console.error("Error fetching users:", err);
+  } catch (error) {
+    console.error("🔥 SEARCH ERROR:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -205,33 +272,101 @@ export const getUserById = async (req, res) => {
 };
 
 // // Update User
+// export const updateUser = async (req, res) => {
+//   try {
+//     const { role, username, email, password, confirm_password } = req.body;
+
+//     if (password !== confirm_password) {
+//       return res.status(400).json({ error: "Passwords do not match" });
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const [updatedRows] = await User.update(
+//       {
+//         role,
+//         username,
+//         email,
+//         password: hashedPassword,
+//         confirm_password: hashedPassword,
+//       },
+//       { where: { id: req.params.id } }
+//     );
+
+//     if (updatedRows === 0)
+//       return res.status(404).json({ message: "User not found" });
+
+//     res.status(200).json({ message: "User updated successfully" });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
 export const updateUser = async (req, res) => {
   try {
-    const { role, username, email, password, confirm_password } = req.body;
+    const { id } = req.params;
+    let { username, email, password, confirm_password, role_id, status } =
+      req.body;
 
-    if (password !== confirm_password) {
-      return res.status(400).json({ error: "Passwords do not match" });
+    // 1️⃣ Check user exists
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // 2️⃣ Email normalize + uniqueness check (if changed)
+    if (email) {
+      email = email.toLowerCase();
 
-    const [updatedRows] = await User.update(
-      {
-        role,
-        username,
-        email,
-        password: hashedPassword,
-        confirm_password: hashedPassword,
+      const existingUser = await User.findOne({
+        where: {
+          email,
+          id: { [Op.ne]: id }, // exclude current user
+        },
+      });
+
+      if (existingUser) {
+        return res.status(409).json({ error: "Email already in use" });
+      }
+    }
+
+    // 3️⃣ Password update (ONLY if provided)
+    let hashedPassword = user.password;
+
+    if (password || confirm_password) {
+      if (password !== confirm_password) {
+        return res.status(400).json({ error: "Passwords do not match" });
+      }
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // 4️⃣ Profile image (optional)
+    const profileImage = req.file ? req.file.filename : user.user_profile;
+
+    // 5️⃣ Update user
+    await user.update({
+      username: username ?? user.username,
+      email: email ?? user.email,
+      password: hashedPassword,
+      role_id: role_id ?? user.role_id,
+      status: status ?? user.status,
+      user_profile: profileImage,
+    });
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role_id: user.role_id,
+        status: user.status,
+        user_profile: user.user_profile,
       },
-      { where: { id: req.params.id } }
-    );
-
-    if (updatedRows === 0)
-      return res.status(404).json({ message: "User not found" });
-
-    res.status(200).json({ message: "User updated successfully" });
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Update user error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 

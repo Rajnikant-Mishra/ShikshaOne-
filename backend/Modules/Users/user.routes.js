@@ -29,7 +29,6 @@
 
 // export default router;
 
-
 import express from "express";
 import upload from "../../middlewares/uploadProfile.js";
 import {
@@ -50,20 +49,16 @@ const router = express.Router();
 router.post("/", upload.single("user_profile"), createUser);
 
 router.post("/login", loginUser);
-router.post("/logout", authenticateToken, logoutUser);
+router.post("/logout", logoutUser);
 
-router.get("/all",  getAllUsers);
-router.get("/users/:id", authenticateToken, getUserById);
+router.get("/all", getAllUsers);
+router.get("/:id", getUserById);
+
 
 // UPDATE USER PROFILE IMAGE
-router.put(
-  "/users/:id",
-  authenticateToken,
-  upload.single("user_profile"),
-  updateUser
-);
+router.put("/edit/:id", upload.single("user_profile"), updateUser);
 
-router.delete("/:id", authenticateToken, deleteUser);
+router.delete("/:id", deleteUser);
 router.get("/profile", authenticateToken, getUserProfile);
 
 export default router;

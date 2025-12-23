@@ -15,11 +15,7 @@ router.post(
 );
 router.get("/", subjectController.getAll);
 // router.get("/:id", subjectController.getById);
-router.put(
-  "/:id",
-  validateRequest(updateSubjectSchema),
-  subjectController.update
-);
+router.put("/:id", subjectController.update);
 router.delete("/:id", subjectController.delete);
 
 export default router;

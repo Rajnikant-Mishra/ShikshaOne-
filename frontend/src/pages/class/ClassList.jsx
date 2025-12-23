@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, Plus, Trash, MoreHorizontal } from "lucide-react";
+import { Search, Plus, Trash, MoreHorizontal, Edit } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Card, CardContent, CardHeader } from "../../components/ui/card";
@@ -52,14 +54,16 @@ const Class = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [classToDelete, setClassToDelete] = useState(null);
+  const [classToEdit, setClassToEdit] = useState(null); // For editing
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const limit = 10;
 
-  // React Hook Form
+  // React Hook Form - shared for both add and edit
   const {
     register,
     handleSubmit,
@@ -75,7 +79,7 @@ const Class = () => {
     },
   });
 
-  // Fetch Classes with React Query
+  // Fetch Classes
   const {
     data: classesData,
     isLoading,
@@ -101,8 +105,7 @@ const Class = () => {
       axios.post(`${API_BASE_URL}/api/student-class/`, data),
     onSuccess: () => {
       toast({ title: "Success", description: "Class created successfully" });
-      reset();
-      setIsAddDialogOpen(false);
+      resetForm();
       queryClient.invalidateQueries({ queryKey: ["classes"] });
       setPage(1);
     },
@@ -111,6 +114,23 @@ const Class = () => {
         variant: "destructive",
         title: "Error",
         description: error.response?.data?.error || "Failed to add class",
+      });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) =>
+      axios.put(`${API_BASE_URL}/api/student-class/${id}`, data),
+    onSuccess: () => {
+      toast({ title: "Success", description: "Class updated successfully" });
+      resetForm();
+      queryClient.invalidateQueries({ queryKey: ["classes"] });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response?.data?.error || "Failed to update class",
       });
     },
   });
@@ -133,9 +153,29 @@ const Class = () => {
     },
   });
 
-  // Handlers
+  // Reset form and close dialogs
+  const resetForm = () => {
+    reset();
+    setIsAddDialogOpen(false);
+    setIsEditDialogOpen(false);
+    setClassToEdit(null);
+  };
+
+  // Form submit handler (used for both create and update)
   const onSubmit = (data) => {
-    createMutation.mutate(data);
+    if (classToEdit) {
+      updateMutation.mutate({ id: classToEdit.id, data });
+    } else {
+      createMutation.mutate(data);
+    }
+  };
+
+  // Open edit dialog and pre-fill form
+  const handleEdit = (cls) => {
+    setClassToEdit(cls);
+    setValue("class_name", cls.class_name);
+    setValue("status", cls.status);
+    setIsEditDialogOpen(true);
   };
 
   const handleDeleteConfirm = () => {
@@ -159,7 +199,12 @@ const Class = () => {
         {/* Add Dialog */}
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => reset()}>
+            <Button
+              onClick={() => {
+                reset();
+                setClassToEdit(null);
+              }}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Add Class
             </Button>
@@ -209,14 +254,7 @@ const Class = () => {
               </div>
 
               <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    reset();
-                    setIsAddDialogOpen(false);
-                  }}
-                >
+                <Button type="button" variant="outline" onClick={resetForm}>
                   Cancel
                 </Button>
                 <Button type="submit" disabled={createMutation.isPending}>
@@ -292,6 +330,10 @@ const Class = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleEdit(cls)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-destructive focus:text-destructive"
                       onClick={() => {
@@ -340,6 +382,67 @@ const Class = () => {
           </Button>
         </div>
       )}
+
+      {/* Edit Dialog - Reuses same form */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit Class</DialogTitle>
+            <DialogDescription>
+              Update the details of the class.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <label
+                  htmlFor="class_name_edit"
+                  className="font-medium text-sm"
+                >
+                  Class Name
+                </label>
+                <Input
+                  id="class_name_edit"
+                  placeholder="Enter class name"
+                  {...register("class_name")}
+                />
+                {errors.class_name && (
+                  <p className="text-sm text-destructive">
+                    {errors.class_name.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="status_edit" className="font-medium text-sm">
+                  Status
+                </label>
+                <Select
+                  value={watch("status")}
+                  onValueChange={(value) => setValue("status", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={resetForm}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={updateMutation.isPending}>
+                {updateMutation.isPending ? "Saving..." : "Save Changes"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
